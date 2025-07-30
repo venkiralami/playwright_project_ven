@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="CrossPlatformSuite" verbose="2" parallel="tests" thread-count="3">
+    <test name="SeleniumTests">
+        <parameter name="platform" value="selenium"/>
+        <classes>
+            <class name="tests.CrossPlatformTests"/>
+        </classes>
+    </test>
+
+    <test name="PlaywrightTests">
+        <parameter name="platform" value="playwright"/>
+        <classes>
+            <class name="tests.CrossPlatformTests"/>
+        </classes>
+    </test>
+
+    <test name="AppiumTests">
+        <parameter name="platform" value="appium"/>
+        <classes>
+            <class name="tests.CrossPlatformTests"/>
+        </classes>
+    </test>
+</suite>
