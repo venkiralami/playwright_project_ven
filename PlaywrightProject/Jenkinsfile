@@ -3,47 +3,48 @@ pipeline {
 
     tools {
         maven 'Maven'
-        jdk 'JAVA_HOME'
+        jdk 'JDK 17'
     }
 
     environment {
-        REPORT_DIR = "test-output"
+        REPORT_DIR = "PlaywrightProject/test-output"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/venkiralami/playwright_project_ven.git'
+                    url: 'https://github.com/venkiralami/playwright_project_ven.git',
+                    credentialsId: 'GitHubCredsId'
             }
         }
 
         stage('Build') {
             steps {
-				sh "cd PlaywrightProject"
-                sh 'mvn clean install'
+                dir('PlaywrightProject') {
+                    sh 'mvn clean install'
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'mvn test'
+                dir('PlaywrightProject') {
+                    sh 'mvn test'
+                }
             }
         }
 
         stage('Publish Reports') {
             steps {
-                
-                             
-                             publishHTML(target: [
-    allowMissing: false,
-    alwaysLinkToLastBuild: true,
-    keepAll: true,
-    reportDir: "${env.REPORT_DIR}",
-    reportFiles: 'ExtentReport.html',
-    reportName: 'Extent Report'
-])
-
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: "${env.REPORT_DIR}",
+                    reportFiles: 'ExtentReport.html',
+                    reportName: 'Extent Report'
+                ])
             }
         }
     }
@@ -51,10 +52,13 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-            junit 'test-output/testng-results.xml'
+            junit 'PlaywrightProject/test-output/testng-results.xml'
         }
+
         failure {
-            mail to: 'venki.ralami@gmail.com',
+            // 🔒 Optional: Remove if email not configured
+            // Replace with working SMTP or comment it out
+            mail to: 'team@example.com',
                  subject: "Build Failed: ${env.JOB_NAME}",
                  body: "Check Jenkins for details: ${env.BUILD_URL}"
         }
