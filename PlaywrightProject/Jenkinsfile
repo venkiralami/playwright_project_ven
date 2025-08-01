@@ -20,6 +20,7 @@ pipeline {
 
         stage('Build') {
             steps {
+				sh "cd PlaywrightProject"
                 sh 'mvn clean install'
             }
         }
