@@ -34,14 +34,14 @@ pipeline {
     post {
         always {
             publishHTML(target: [
-                reportDir: 'PlaywrightProject/test-output',
-                reportFiles: 'ExtentReport.html',
-                reportName: 'Extent Report',
+                reportDir: 'PlaywrightProject/target/surefire-reports',
+                reportFiles: 'index.html',
+                reportName: 'Surefire Report',
                 keepAll: true,
                 alwaysLinkToLastBuild: true,
                 allowMissing: false
             ])
-            junit 'PlaywrightProject/target/surefire-reports/*.xml'
+            junit 'PlaywrightProject/target/surefire-reports/*.html'
         }
     }
 }
