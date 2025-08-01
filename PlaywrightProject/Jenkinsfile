@@ -41,7 +41,7 @@ pipeline {
                 alwaysLinkToLastBuild: true,
                 allowMissing: false
             ])
-            junit 'PlaywrightProject/target/surefire-reports/*.html'
+            junit 'PlaywrightProject/target/surefire-reports/*.xml'
         }
     }
 }
