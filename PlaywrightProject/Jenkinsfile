@@ -33,9 +33,17 @@ pipeline {
 
         stage('Publish Reports') {
             steps {
-                publishHTML([reportDir: "${env.REPORT_DIR}",
-                             reportFiles: 'ExtentReport.html',
-                             reportName: 'Extent Report'])
+                
+                             
+                             publishHTML(target: [
+    allowMissing: false,
+    alwaysLinkToLastBuild: true,
+    keepAll: true,
+    reportDir: "${env.REPORT_DIR}",
+    reportFiles: 'ExtentReport.html',
+    reportName: 'Extent Report'
+])
+
             }
         }
     }
