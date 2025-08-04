@@ -28,11 +28,11 @@ pipeline {
         }
 
        stage('Test & Report') {
-    steps {
+    		steps {	
         sh 'cd PlaywrightProject && mvn clean test'
-    }
-    post {
-        always {
+    	}
+    	post {
+       	 always {
             publishHTML(target: [
                 reportDir: 'PlaywrightProject/target/surefire-reports',
                 reportFiles: 'index.html',
@@ -42,21 +42,20 @@ pipeline {
                 allowMissing: false
             ])
             junit 'PlaywrightProject/target/surefire-reports/*.xml'
-        }
-    }
-}
-stage('SonarQube Analysis') {
+       		 }
+   		 	}
+	}
+	stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
 					dir('PlaywrightProject') {
 						sh '''
-    mvn clean test jacoco:report sonar:sonar \
-    -Dsonar.projectKey=PlaywrightProject \
-    -Dsonar.host.url=http://localhost:9000 \
-    -Dsonar.login=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
-    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-'''        
-                    }
+    					mvn clean test jacoco:report sonar:sonar \
+   						 -Dsonar.projectKey=PlaywrightProject \
+   						 -Dsonar.host.url=http://localhost:9000 \
+   						 -Dsonar.login=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
+  					 	 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+'''                 }
                 }
             }
         }
