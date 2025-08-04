@@ -49,12 +49,13 @@ stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
 					dir('PlaywrightProject') {
-                    sh '''
-                        mvn sonar:sonar \
-                        -Dsonar.projectKey=PlaywrightProject \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=sqa_e9f060a5bab7ae0dae124a41ee67171135152253
-                    '''
+						sh '''
+    mvn clean test jacoco:report sonar:sonar \
+    -Dsonar.projectKey=PlaywrightProject \
+    -Dsonar.host.url=http://localhost:9000 \
+    -Dsonar.login=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
+    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+'''        
                     }
                 }
             }
