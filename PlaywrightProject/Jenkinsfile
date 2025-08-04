@@ -31,19 +31,7 @@ pipeline {
     		steps {	
         sh 'cd PlaywrightProject && mvn clean test'
     	}
-    	post {
-       	 always {
-            publishHTML(target: [
-                reportDir: 'PlaywrightProject/target/surefire-reports',
-                reportFiles: 'index.html',
-                reportName: 'Surefire Report',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false
-            ])
-            junit 'PlaywrightProject/target/surefire-reports/*.xml'
-       		 }
-   		 	}
+    	
 	}
 	stage('SonarQube Analysis') {
             steps {
