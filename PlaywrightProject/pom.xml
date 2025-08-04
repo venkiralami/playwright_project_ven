@@ -45,5 +45,12 @@
   <artifactId>slf4j-simple</artifactId> <!-- or log4j/slf4j-log4j12 if using log4j -->
   <version>2.0.9</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-plugin-api -->
+<dependency>
+    <groupId>org.sonarsource.sonarqube</groupId>
+    <artifactId>sonar-plugin-api</artifactId>
+    <version>9.4.0.54424</version>
+</dependency>
     </dependencies>
 </project>
