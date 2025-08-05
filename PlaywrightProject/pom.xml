@@ -6,6 +6,10 @@
 	<artifactId>PlaywrightProject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+<properties>
+    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+</properties>
+
 	<dependencies>
 		<!--
 		https://mvnrepository.com/artifact/com.microsoft.playwright/playwright -->

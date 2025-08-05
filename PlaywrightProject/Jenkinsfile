@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master',
+                git branch: 'working_sonar_v1.0',
                     url: 'https://github.com/venkiralami/playwright_project_ven.git',
                     credentialsId: 'GitHubCredsId'
             }
