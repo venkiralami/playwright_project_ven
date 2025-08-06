@@ -5,6 +5,9 @@ pipeline {
         maven 'Maven'
         jdk 'JAVA_HOME'
     }
+    parameters {
+        string(name: 'Branch_Name', defaultValue: 'main', description: 'Git Branch to be built')
+    }
 
     environment {
        SONARQUBE_ENV = 'LocalSonar'
@@ -13,13 +16,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'working_sonar_v1.0',
+                git branch: "${params.Branch_Name}",
                     url: 'https://github.com/venkiralami/playwright_project_ven.git',
                     credentialsId: 'GitHubCredsId'
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') {
             steps {
                 dir('PlaywrightProject') {
                     sh 'mvn clean install'
@@ -27,12 +30,7 @@ pipeline {
             }
         }
 
-       stage('Test & Report') {
-    		steps {	
-        sh 'cd PlaywrightProject && mvn test'
-    	}
-    	
-	}
+      
 	stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
