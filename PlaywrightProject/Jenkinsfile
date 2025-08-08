@@ -5,12 +5,9 @@ pipeline {
         maven 'Maven'
         jdk 'JAVA_HOME'
     }
+
     parameters {
         string(name: 'Branch_Name', defaultValue: 'main', description: 'Git Branch to be built')
-    }
-
-    environment {
-       SONARQUBE_ENV = 'LocalSonar'
     }
 
     stages {
@@ -25,47 +22,50 @@ pipeline {
         stage('Build & Test') {
             steps {
                 dir('PlaywrightProject') {
-                    sh 'mvn clean install'
+                    sh 'mvn clean test surefire-report:report'
                 }
             }
         }
 
-        stage('SonarQube Analysis') {
+        stage('Publish Test Results') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    dir('PlaywrightProject') {
-                        sh '''
-                            mvn jacoco:report sonar:sonar \
-                            -Dsonar.projectKey=PlaywrightProject \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.token=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
-                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-                        '''
-                    }
-                }
+                junit 'PlaywrightProject/target/surefire-reports/*.xml'
             }
         }
 
-        stage('Notify') {
+        stage('Archive Surefire Report') {
             steps {
-                echo 'Testing email notification...'
+                archiveArtifacts artifacts: 'PlaywrightProject/target/site/surefire-report.html', fingerprint: true
             }
         }
     }
 
     post {
-        success {
-            emailext(
+        always {
+            emailext (
                 to: 'venki.ralami@gmail.com',
-                subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build was successful! Check logs here: ${env.BUILD_URL}"
-            )
-        }
-        failure {
-            emailext(
-                to: 'venki.ralami@gmail.com',
-                subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: "Build failed! Check logs here: ${env.BUILD_URL}"
+                subject: "Build ${currentBuild.fullDisplayName} - Test Results: ${currentBuild.currentResult}",
+                mimeType: 'text/html',
+                body: """
+                <p>Hello,</p>
+                <p>Build <b>${currentBuild.fullDisplayName}</b> completed with status: <b>${currentBuild.currentResult}</b>.</p>
+                
+                <p><b>Test Summary:</b></p>
+                <ul>
+                  <li>Total Tests: ${TEST_COUNTS, var="totalCount"}</li>
+                  <li>Passed: ${TEST_COUNTS, var="passCount"}</li>
+                  <li>Failed: ${TEST_COUNTS, var="failCount"}</li>
+                  <li>Skipped: ${TEST_COUNTS, var="skipCount"}</li>
+                </ul>
+                
+                <p><b>Failed Tests (up to 10):</b></p>
+                <pre>${FAILED_TESTS, maxLines=10, escapeHtml=true}</pre>
+                
+                <p>Full Surefire report is attached.</p>
+                <p><a href="${BUILD_URL}artifact/PlaywrightProject/target/site/surefire-report.html">View Surefire Report in Jenkins</a></p>
+                """
+                ,
+                attachmentsPattern: 'PlaywrightProject/target/site/surefire-report.html'
             )
         }
     }
