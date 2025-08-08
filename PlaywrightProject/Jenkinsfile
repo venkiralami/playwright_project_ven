@@ -40,33 +40,33 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            emailext (
-                to: 'venki.ralami@gmail.com',
-                subject: "Build ${currentBuild.fullDisplayName} - Test Results: ${currentBuild.currentResult}",
-                mimeType: 'text/html',
-                body: """
-                <p>Hello,</p>
-                <p>Build <b>${currentBuild.fullDisplayName}</b> completed with status: <b>${currentBuild.currentResult}</b>.</p>
-                
-                <p><b>Test Summary:</b></p>
-                <ul>
-                  <li>Total Tests: ${TEST_COUNTS, var="totalCount"}</li>
-                  <li>Passed: ${TEST_COUNTS, var="passCount"}</li>
-                  <li>Failed: ${TEST_COUNTS, var="failCount"}</li>
-                  <li>Skipped: ${TEST_COUNTS, var="skipCount"}</li>
-                </ul>
-                
-                <p><b>Failed Tests (up to 10):</b></p>
-                <pre>${FAILED_TESTS, maxLines=10, escapeHtml=true}</pre>
-                
-                <p>Full Surefire report is attached.</p>
-                <p><a href="${BUILD_URL}artifact/PlaywrightProject/target/site/surefire-report.html">View Surefire Report in Jenkins</a></p>
-                """
-                ,
-                attachmentsPattern: 'PlaywrightProject/target/site/surefire-report.html'
-            )
-        }
+   post {
+    always {
+        emailext (
+            to: 'venki.ralami@gmail.com',
+            subject: "Build ${currentBuild.fullDisplayName} - Test Results: ${currentBuild.currentResult}",
+            mimeType: 'text/html',
+            body: """
+            <p>Hello,</p>
+            <p>Build <b>${currentBuild.fullDisplayName}</b> completed with status: <b>${currentBuild.currentResult}</b>.</p>
+            
+            <p><b>Test Summary:</b></p>
+            <ul>
+              <li>Total Tests: \${TEST_COUNTS, var="totalCount"}</li>
+              <li>Passed: \${TEST_COUNTS, var="passCount"}</li>
+              <li>Failed: \${TEST_COUNTS, var="failCount"}</li>
+              <li>Skipped: \${TEST_COUNTS, var="skipCount"}</li>
+            </ul>
+            
+            <p><b>Failed Tests (up to 10):</b></p>
+            <pre>\${FAILED_TESTS, maxLines=10, escapeHtml=true}</pre>
+            
+            <p>Full Surefire report is attached.</p>
+            <p><a href="${BUILD_URL}artifact/PlaywrightProject/target/site/surefire-report.html">View Surefire Report in Jenkins</a></p>
+            """,
+            attachmentsPattern: 'PlaywrightProject/target/site/surefire-report.html'
+        )
     }
+}
+
 }
