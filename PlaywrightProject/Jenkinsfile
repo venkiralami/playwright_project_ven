@@ -68,15 +68,7 @@ pipeline {
                 body: "Build failed! Check logs here: ${env.BUILD_URL}"
             )
         }
-    }
-/*
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
-        */
+    
+
 	}
  }  
