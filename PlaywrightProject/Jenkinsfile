@@ -45,6 +45,30 @@ pipeline {
                 }
             }
         }
+        
+         stages {
+        stage('Build') {
+            steps {
+                echo 'Testing email...'
+            }
+        }
+    }
+    post {
+        success {
+            emailext(
+                to: 'venki.ralami@gmail.com',
+                subject: "✅ SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build was successful! Check logs here: ${env.BUILD_URL}"
+            )
+        }
+        failure {
+            emailext(
+                to: 'venki.ralami@gmail.com',
+                subject: "❌ FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build failed! Check logs here: ${env.BUILD_URL}"
+            )
+        }
+    }
 /*
         stage('Quality Gate') {
             steps {
