@@ -30,29 +30,29 @@ pipeline {
             }
         }
 
-      
-	stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-					dir('PlaywrightProject') {
-						sh '''
-    					mvn jacoco:report sonar:sonar \
-   						 -Dsonar.projectKey=PlaywrightProject \
-   						 -Dsonar.host.url=http://localhost:9000 \
-   						 -Dsonar.token=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
-  					 	 -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-'''                 }
+                    dir('PlaywrightProject') {
+                        sh '''
+                            mvn jacoco:report sonar:sonar \
+                            -Dsonar.projectKey=PlaywrightProject \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.token=sqa_e9f060a5bab7ae0dae124a41ee67171135152253 \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
+                    }
                 }
             }
         }
-        
-         stages {
-        stage('Build') {
+
+        stage('Notify') {
             steps {
-                echo 'Testing email...'
+                echo 'Testing email notification...'
             }
         }
     }
+
     post {
         success {
             emailext(
@@ -68,7 +68,5 @@ pipeline {
                 body: "Build failed! Check logs here: ${env.BUILD_URL}"
             )
         }
-    
-
-	}
- }  
+    }
+}
