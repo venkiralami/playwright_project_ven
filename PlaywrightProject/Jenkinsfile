@@ -35,7 +35,7 @@ pipeline {
 
         stage('Archive Surefire Report') {
             steps {
-                archiveArtifacts artifacts: 'PlaywrightProject/target/site/surefire-report.html', fingerprint: true
+                archiveArtifacts artifacts: 'PlaywrightProject/target/surefire-reports/Surefire suite/Surefire test.html', fingerprint: true
             }
         }
     }
