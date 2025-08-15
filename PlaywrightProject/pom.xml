@@ -6,7 +6,7 @@
 	<artifactId>PlaywrightProject</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-<properties>
+<properties> 
     <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 </properties>
 
