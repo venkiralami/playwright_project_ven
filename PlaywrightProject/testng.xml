@@ -5,7 +5,7 @@
         <classes>
             <class name="tests.CrossPlatformTests"/>
         </classes>
-    </test>
+    </test> 
 
     <test name="PlaywrightTests">
         <parameter name="platform" value="playwright"/>

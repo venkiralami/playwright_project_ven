@@ -41,10 +41,10 @@ public class CrossPlatformTests {
     			System.out.println("Running login test on platform: " + platform);
         switch (platform.toLowerCase()) {
             case "selenium":
-                SeleniumDriverManager.getDriver().get("https://example.com");
+                SeleniumDriverManager.getDriver().get("https://google.com");
                 break;
             case "playwright":
-                PlaywrightDriverManager.getPage().navigate("https://example.com");
+                PlaywrightDriverManager.getPage().navigate("https://google.com");
                 break;
             case "appium":
                 // Appium steps
